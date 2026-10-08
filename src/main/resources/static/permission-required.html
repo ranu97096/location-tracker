@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permission Required</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 15%; padding: 20px; }
+        button { padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #manual-instruction { display: none; color: red; margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Location Access is Required</h2>
+    <p>To continue, we need access to your location.</p>
+    
+    <button onclick="requestPermissionAgain()">Grant Permission</button>
+
+    <script>
+        function requestPermissionAgain() {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const payload = {
+                        latitude: position.coords.latitude.toString(),
+                        longitude: position.coords.longitude.toString()
+                    };
+
+                    fetch('/api/location', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }).then(response => {
+                        if(response.ok) window.location.href = '/success.html';
+                    });
+                },
+                function(error) {
+                    document.getElementById('manual-instruction').style.display = 'block';
+                }
+            );
+        }
+    </script>
+</body>
+</html>
