@@ -17,6 +17,11 @@ public class LocationController {
 	public LocationController(EmailService emailService) {
 		this.emailService = emailService;
 	}
+	
+	@GetMapping("/health")
+	public ResponseEntity<String> healthCheck() {
+	    return ResponseEntity.ok("Service is awake!");
+	}
 
 	@PostMapping("/location")
 	public ResponseEntity<String> receiveLocation(@RequestBody LocationRequest request) {
