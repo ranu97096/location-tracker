@@ -37,7 +37,7 @@ public class EmailService {
 			mailSender.send(message);
 			log.info("===> Mesage send successfully");
 		} catch (Exception e) {
-			log.info("===> Mesage send successfully");
+			log.error("===> Email failed to send: {}", e.getMessage(), e);
 		}
 	}
 }
